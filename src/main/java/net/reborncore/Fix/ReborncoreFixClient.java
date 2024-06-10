@@ -1,8 +1,8 @@
-package net.gabriel.test;
+package net.reborncore.Fix;
 
 import net.fabricmc.api.ClientModInitializer;
 
-public class TestmodClient implements ClientModInitializer {
+public class ReborncoreFixClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
 

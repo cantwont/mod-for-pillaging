@@ -1,4 +1,4 @@
-package net.gabriel.test.mixin;
+package net.reborncore.Fix.mixin;
 
 import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;

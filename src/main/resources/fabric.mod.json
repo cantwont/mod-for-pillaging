@@ -1,29 +1,35 @@
 {
 	"schemaVersion": 1,
-	"id": "testmod",
+	"id": "techrebornfix",
 	"version": "${version}",
-	"name": "testmod",
-	"description": "Gabriel",
+	"name": "techrebornfix",
+	"description": "Fixes some bugs related to certain auxillary items such as the Industrial Electrolyte not mixing according to the wiki.",
 	"authors": [
-		"Gabriel"
+		"modmuss50",
+		"GigaBit101",
+		"ProspectorDev",
+		"yulife_curse",
+		"drcrazy777",
+		"Ourten",
+		"Spearkiller"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://wiki.techreborn.ovh/doku.php?id=start",
+		"sources": "https://www.curseforge.com/minecraft/mc-mods/techreborn"
 	},
 	"license": "MIT",
-	"icon": "assets/testmod/icon.png",
+	"icon": "assets/reborncorefix/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"net.gabriel.test.Testmod"
+			"net.reborncore.Fix.ReborncoreFix"
 		],
 		"fabric-datagen": [
-			"net.gabriel.test.TestmodDataGenerator"
+			"net.reborncore.Fix.ReborncoreDataGenerator"
 		]
 	},
 	"mixins": [
-		"testmod.mixins.json"
+		"reborncore.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.15.11",
